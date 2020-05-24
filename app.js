@@ -19,10 +19,12 @@ app.use((req, res, next) => {
 
 mongoose
   .connect(
-    `mongodb+srv://michal123:MiloOfCroton@devconnector-6tf9d.mongodb.net/michal123?retryWrites=true&w=majority`,
+    `mongodb+srv://michal123:michal123@devconnector-6tf9d.mongodb.net/MiloOfCroton?retryWrites=true&w=majority`,
+    { useNewUrlParser: true, useUnifiedTopology: true },
   )
   .then(() => {
     app.listen(process.env.PORT || 5000);
+    console.log("API started");
   })
   .catch((err) => {
     console.log(err);
