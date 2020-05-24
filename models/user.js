@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt-nodejs");
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true, minlength: 6 },
-  workouts: [{ type: mongoose.Types.ObjectId, required: true, ref: "Workout" }],
+  workouts: [{ type: mongoose.Types.ObjectId, ref: "Workout" }],
 });
 
 // On Save Hook, encrypt password
