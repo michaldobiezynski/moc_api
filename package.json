@@ -1,0 +1,16 @@
+{
+  "name": "moc_api",
+  "version": "1.0.0",
+  "description": "Main api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://michaldobiezynski@bitbucket.org/michaldobiezynski/moc_api.git"
+  },
+  "author": "Michal Dobiezynski",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/michaldobiezynski/moc_api#readme"
+}
