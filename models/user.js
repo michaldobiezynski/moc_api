@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt-nodejs");
 
 const userSchema = new Schema({
   name: { type: String },
+  weight: { type: Number },
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true, minlength: 6 },
   workouts: [{ type: mongoose.Types.ObjectId, ref: "Workout" }],
