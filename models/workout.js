@@ -11,7 +11,7 @@ const workoutSchema = new Schema({
   exercises: [
     { type: mongoose.Types.ObjectId, required: true, ref: "Exercise" },
   ],
-  creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+  user: { type: mongoose.Types.ObjectId, required: true, ref: "user" },
 });
 
 module.exports = mongoose.model("Workout", workoutSchema);

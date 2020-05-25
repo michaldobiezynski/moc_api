@@ -1,8 +1,8 @@
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
-const Exercise = require("../models/exercise");
-const HttpError = require("../models/http-error");
+const Exercise = require("../models/Exercise");
+const HttpError = require("../models/Http-error");
 
 exports.createExercise = async (req, res, next) => {
   console.log("I was called");

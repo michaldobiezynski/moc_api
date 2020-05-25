@@ -8,7 +8,7 @@ const setSchema = new Schema({
   weightPerRep: { type: Number, required: true },
   additionalWeightPerRep: { type: Number, required: true },
   totalWeightLiftedInThisSet: { type: Number, required: true },
-  creator: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+  user: { type: mongoose.Types.ObjectId, required: true, ref: "user" },
 });
 
 module.exports = mongoose.model("Set", setSchema);
