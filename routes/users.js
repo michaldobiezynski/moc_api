@@ -18,7 +18,7 @@ router.post(
     check("email", "Please include a valid email").isEmail(),
     check(
       "password",
-      "Please enter a password with 6 r more characters",
+      "Please enter a password with 6 or more characters"
     ).isLength({
       min: 6,
     }),
@@ -72,13 +72,13 @@ router.post(
         (error, token) => {
           if (error) throw error;
           res.json({ token });
-        },
+        }
       );
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server error");
     }
-  },
+  }
 );
 
 module.exports = router;
