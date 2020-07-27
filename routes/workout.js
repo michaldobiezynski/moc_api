@@ -18,11 +18,7 @@ router.get("/", auth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   const { date, timeLimit, repsGoal, sets, time, totalWeightLifted } = req.body;
-    if (!name || !locations) {
-      return res
-        .status(422)
-        .send({ error: "You must provide a name and locations" });
-    }
+
   try {
     const workout = new Workout({
       date,

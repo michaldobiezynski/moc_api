@@ -13,9 +13,9 @@ const exerciseSchema = new Schema({
   description: { type: String },
   type: { type: String },
   musclesWorked: [String],
-  weight: { type: Number, required },
-  additionalWeight: { type: Number, required },
-  reps: { type: Number, required },
+  weight: { type: Number },
+  additionalWeight: { type: Number },
+  reps: { type: Number },
 });
 
 const setSchema = new Schema({
