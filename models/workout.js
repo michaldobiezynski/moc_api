@@ -13,8 +13,9 @@ const exerciseSchema = new Schema({
   description: { type: String },
   type: { type: String },
   musclesWorked: [String],
-  weight: { type: Number },
-  reps: { type: Number },
+  weight: { type: Number, required },
+  additionalWeight: { type: Number, required },
+  reps: { type: Number, required },
 });
 
 const setSchema = new Schema({
@@ -37,27 +38,24 @@ const workoutSchema = new Schema({
 workoutSchema.pre("save", function (next) {
   let calculatedWeight = 0;
   this.sets.forEach((set) => {
-    console.log(set);
     set.exercises.forEach((exercise) => {
-      console.log(exercise);
       if (exercise.type === "bodyweight") {
         let bodyWeightExercise = bodyWeightExercises.find(
           (exe) => exe.name === exercise.name
         );
         calculatedWeight =
           calculatedWeight +
-          exercise.weight * bodyWeightExercise.percantageOfBodyWeightUsed;
-        console.log(calculatedWeight);
+          (exercise.additionalWeight +
+            exercise.weight * bodyWeightExercise.percantageOfBodyWeightUsed) *
+            exercise.reps;
       } else {
         calculatedWeight = calculatedWeight + exercise.weight;
       }
     });
   });
 
-  // this.totalWeightLifted = (
-  //   (this.totalRight / this.totalAttempts) *
-  //   100
-  // ).toFixed(2);
+  this.totalWeightLifted = calculatedWeight.toFixed(2);
+  console.log(this.totalWeightLifted);
   next();
 });
 
