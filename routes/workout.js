@@ -42,4 +42,31 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const workout = await Post.findById(req.params.id);
+
+    if (!workout) {
+      return res.status(404).json({ msg: "Workout not found" });
+    }
+
+    // Check user
+    if (workout.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+    await workout.remove();
+
+    res.json({ msg: "Workout removed" });
+  } catch (error) {
+    console.error(error.message);
+
+    if (error.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Workout not found" });
+    }
+
+    res.status(500).send("Server Errors");
+  }
+});
+
 module.exports = router;
