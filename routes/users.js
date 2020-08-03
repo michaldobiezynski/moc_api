@@ -7,6 +7,9 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 const User = require("../models/user");
+const Workout = require("../models/Workout");
+
+const auth = require("../middleware/auth");
 
 // @route   POST api/users
 // @desc    Register user
@@ -80,5 +83,38 @@ router.post(
     }
   }
 );
+
+// @route   DELETE api/users
+// @desc    Delete user
+// @access  Private
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Check user
+    if (user._id.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+    const workouts = await Workout.find({ userId: req.user.id });
+    Workout.deleteMany({ userId: user._id.toString(), function(err) {} });
+
+    await user.remove();
+
+    res.json({ msg: "User and associated workouts removed." });
+  } catch (error) {
+    console.error(error.message);
+
+    if (error.kind === "ObjectId") {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.status(500).send("Server Errors");
+  }
+});
 
 module.exports = router;
