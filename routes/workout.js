@@ -42,6 +42,29 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
+router.put("/:id", auth, async (req, res) => {
+  const { date, timeLimit, repsGoal, sets, time, totalWeightLifted } = req.body;
+
+  let miliSec = Date.parse(date);
+  try {
+    let workout = await Workout.findById(req.params.id);
+
+    workout.date = miliSec;
+    workout.timeLimit = timeLimit;
+    workout.repsGoal = repsGoal;
+    workout.time = time;
+    workout.totalWeightLifted = totalWeightLifted;
+    workout.date = miliSec;
+
+    await workout.save();
+
+    res.json(workout);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Errors");
+  }
+});
+
 router.delete("/:id", auth, async (req, res) => {
   try {
     const workout = await Workout.findById(req.params.id);
