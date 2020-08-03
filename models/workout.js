@@ -27,7 +27,7 @@ const workoutSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  date: { type: String },
+  date: { type: Date },
   timeLimit: { type: Number },
   repsGoal: { type: Number },
   sets: [setSchema],
