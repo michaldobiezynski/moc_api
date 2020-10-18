@@ -2,10 +2,14 @@
   "name": "moc_api",
   "version": "1.0.0",
   "description": "Main api",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "engines": {
     "node": "12.7.0"
@@ -19,8 +23,6 @@
   "homepage": "https://bitbucket.org/michaldobiezynski/moc_api#readme",
   "dependencies": {
     "axios": "^0.19.2",
-    "bcrypt": "^4.0.1",
-    "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "config": "^3.3.1",
@@ -31,13 +33,13 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-simple": "^0.5.6",
     "mongoose": "^5.9.15",
-    "mongoose-unique-validator": "^2.0.3",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.4",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "shortid": "^2.2.15",
-    "uuid": "^8.1.0"
+    "sharp": "^0.26.2",
+    "validator": "^13.1.17"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "jest": "^26.5.3",
+    "nodemon": "^2.0.5",
+    "supertest": "^5.0.0"
   }
 }
