@@ -85,6 +85,20 @@ router.patch("/users/me", auth, async (req, res) => {
   }
 });
 
+router.get("/users/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      throw new Error();
+    }
+
+    res.send(user);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
 router.delete("/users/me", auth, async (req, res) => {
   const userId = req.user._id;
   try {
