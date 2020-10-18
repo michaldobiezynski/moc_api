@@ -1,4 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://michal123:michal123@devconnector-6tf9d.mongodb.net/MiloOfCroton?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken"
-}

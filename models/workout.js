@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const shortid = require("shortid");
 
 const bodyWeightExercises = [
   { name: "press up", percantageOfBodyWeightUsed: 0.64 },
@@ -24,10 +23,6 @@ const setSchema = new Schema({
 });
 
 const workoutSchema = new Schema({
-  _id: {
-    type: String,
-    default: shortid.generate,
-  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
