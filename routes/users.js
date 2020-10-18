@@ -1,119 +1,109 @@
 const express = require("express");
-const router = express.Router();
-const { check, validationResult } = require("express-validator");
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
 
-const User = require("../models/user");
-const Workout = require("../models/Workout");
-
+const User = require("../models/User");
 const auth = require("../middleware/auth");
+// const { sendWelcomeEmail, sendDeleteEmail } = require("../emails/account");
 
-// @route   POST api/users
-// @desc    Register user
-// @access  Public
-router.post(
-  "/",
-  [
-    check("name", "Name is required").not().isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
-    check(
-      "password",
-      "Please enter a password with 6 or more characters"
-    ).isLength({
-      min: 6,
-    }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+const router = new express.Router();
 
-    const { name, email, password } = req.body;
-
-    try {
-      let user = await User.findOne({ email });
-
-      if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "User already exists" }] });
-      }
-
-      const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
-
-      user = new User({
-        name,
-        email,
-        avatar,
-        password,
-      });
-
-      const salt = await bcrypt.genSalt(10);
-
-      user.password = await bcrypt.hash(password, salt);
-
-      await user.save();
-
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (error, token) => {
-          if (error) throw error;
-          res.json({ token });
-        }
-      );
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Server error");
-    }
-  }
-);
-
-// @route   DELETE api/users
-// @desc    Delete user
-// @access  Private
-router.delete("/:id", auth, async (req, res) => {
+router.post("/users", async (req, res) => {
+  const user = new User(req.body);
   try {
-    const user = await User.findById(req.params.id);
-
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
-
-    // Check user
-    if (user._id.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "User not authorized" });
-    }
-
-    const workouts = await Workout.find({ userId: req.user.id });
-    Workout.deleteMany({ userId: user._id.toString(), function(err) {} });
-
-    await user.remove();
-
-    res.json({ msg: "User and associated workouts removed." });
+    await user.save();
+    // sendWelcomeEmail(user.email, user.name);
+    const token = await user.generateAuthToken();
+    res.status(201).send({ user, token });
   } catch (error) {
-    console.error(error.message);
+    res.status(400).send(error);
+  }
+});
 
-    if (error.kind === "ObjectId") {
-      return res.status(404).json({ msg: "User not found" });
-    }
+router.post("/users/login", async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    const token = await user.generateAuthToken();
+    res.status(200).send({ user, token });
+  } catch (error) {
+    res.status(400).send();
+  }
+});
 
-    res.status(500).send("Server Errors");
+router.post("/users/logout", auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+
+    res.send();
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+router.post("/users/logoutAll", auth, async (req, res) => {
+  try {
+    req.user.tokens = [];
+    await req.user.save();
+
+    res.send();
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
+router.get("/users/me", auth, async (req, res) => {
+  res.send(req.user);
+});
+
+router.patch("/users/me", auth, async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ["name", "email", "password", "age"];
+  const isValidOperation = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  const userId = req.params.id;
+
+  try {
+    const user = req.user;
+
+    updates.forEach((update) => {
+      user[update] = req.body[update];
+    });
+
+    await user.save();
+
+    res.send(user);
+  } catch (error) {
+    res.status(400).send();
+  }
+});
+
+router.delete("/users/me", auth, async (req, res) => {
+  const userId = req.user._id;
+  try {
+    await req.user.remove();
+    // sendDeleteEmail(req.user.email, req.user.name);
+
+    res.send(req.user);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
+router.delete("/users/me/avatar", auth, async (req, res) => {
+  try {
+    req.user.avatar = undefined;
+    await req.user.save();
+    res.send(req.user);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
