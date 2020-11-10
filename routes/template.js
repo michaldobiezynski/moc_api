@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
+const moment = require("moment");
 
 const auth = require("../middleware/auth");
 const Template = require("../models/Template");
@@ -19,7 +20,9 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
-  const { name, userId, date, exercises } = req.body;
+  const { name, userId, exercises } = req.body;
+
+  const date = req.body.date ? req.body.date : moment().format("DD/MM/YYYY");
 
   try {
     const template = new Template({
