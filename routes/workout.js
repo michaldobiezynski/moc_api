@@ -37,6 +37,7 @@ router.post("/", auth, async (req, res) => {
       timeUsed,
       totalWeightLifted,
       userId: req.user.id,
+      templateId,
     });
     await workout.save();
     res.send(workout);
@@ -46,18 +47,26 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.put("/:id", auth, async (req, res) => {
-  const { date, timeLimit, repsGoal, sets, time, totalWeightLifted } = req.body;
+  const {
+    templateId,
+    date,
+    timeLimit,
+    weightGoal,
+    sets,
+    timeUsed,
+    totalWeightLifted,
+  } = req.body;
 
-  let miliSec = Date.parse(date);
   try {
     let workout = await Workout.findById(req.params.id);
 
-    workout.date = miliSec;
+    workout.templateId = templateId;
+    workout.date = date;
     workout.timeLimit = timeLimit;
-    workout.repsGoal = repsGoal;
-    workout.time = time;
+    workout.weightGoal = weightGoal;
+    workout.sets = sets;
+    workout.timeUsed = timeUsed;
     workout.totalWeightLifted = totalWeightLifted;
-    workout.date = miliSec;
 
     await workout.save();
 
