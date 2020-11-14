@@ -20,7 +20,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
-  const { name, userId, exercises } = req.body;
+  const { name, exercises } = req.body;
 
   const date = req.body.date ? req.body.date : moment().format("DD/MM/YYYY");
 
@@ -39,7 +39,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.put("/:id", auth, async (req, res) => {
-  const { name, userId, date, exercises } = req.body;
+  const { name, date, exercises } = req.body;
 
   try {
     let template = await Template.findById(req.params.id);
