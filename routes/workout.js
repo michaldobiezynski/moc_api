@@ -9,10 +9,7 @@ router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const workouts = await Workout.find({ userId: req.user.id });
-    // workouts.forEach((work) => {
-    //   let readableDate = new Date(parseInt(work.date));
-    //   work.date = readableDate;
-    // });
+
     res.json(workouts);
   } catch (error) {
     console.error(error.message);
@@ -21,17 +18,23 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
-  const { date, timeLimit, repsGoal, sets, time, totalWeightLifted } = req.body;
-
-  let miliSec = Date.parse(date);
+  const {
+    templateId,
+    date,
+    timeLimit,
+    weightGoal,
+    sets,
+    timeUsed,
+    totalWeightLifted,
+  } = req.body;
 
   try {
     const workout = new Workout({
-      date: miliSec,
+      date,
       timeLimit,
-      repsGoal,
+      weightGoal,
       sets,
-      time,
+      timeUsed,
       totalWeightLifted,
       userId: req.user.id,
     });
