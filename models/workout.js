@@ -1,25 +1,11 @@
 const mongoose = require("mongoose");
 
-const bodyWeightExercises = [
-  { name: "press up", percantageOfBodyWeightUsed: 0.64 },
-  { name: "pull up", percantageOfBodyWeightUsed: 1 },
-  { name: "chin up", percantageOfBodyWeightUsed: 1 },
-];
-
 const Schema = mongoose.Schema;
 
-const exerciseSchema = new Schema({
-  name: { type: String },
-  description: { type: String },
-  type: { type: String },
-  musclesWorked: [String],
-  weight: { type: Number },
-  additionalWeight: { type: Number },
-  reps: { type: Number },
-});
-
 const setSchema = new Schema({
-  exercises: [exerciseSchema],
+  exerciseName: { type: String },
+  weight: { type: Number },
+  reps: { type: Number },
 });
 
 const workoutSchema = new Schema({
@@ -27,36 +13,16 @@ const workoutSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  date: { type: Date },
-  timeLimit: { type: Number },
-  repsGoal: { type: Number },
+  templateId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Template",
+  },
   sets: [setSchema],
-  time: { type: Number },
+  date: { type: Date },
+  timeUsed: { type: Number },
+  timeLimit: { type: Number },
+  weightGoal: { type: Number },
   totalWeightLifted: { type: Number },
-});
-
-workoutSchema.pre("save", function (next) {
-  let calculatedWeight = 0;
-  this.sets.forEach((set) => {
-    set.exercises.forEach((exercise) => {
-      if (exercise.type === "bodyweight") {
-        let bodyWeightExercise = bodyWeightExercises.find(
-          (exe) => exe.name === exercise.name
-        );
-        calculatedWeight =
-          calculatedWeight +
-          (exercise.additionalWeight +
-            exercise.weight * bodyWeightExercise.percantageOfBodyWeightUsed) *
-            exercise.reps;
-      } else {
-        calculatedWeight = calculatedWeight + exercise.weight;
-      }
-    });
-  });
-
-  this.totalWeightLifted = calculatedWeight.toFixed(2);
-  console.log(this.totalWeightLifted);
-  next();
 });
 
 module.exports = mongoose.model("Workout", workoutSchema);
