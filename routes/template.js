@@ -22,12 +22,9 @@ router.get("/", auth, async (req, res) => {
 router.post("/", auth, async (req, res) => {
   const { name, exercises } = req.body;
 
-  const date = req.body.date ? req.body.date : moment().format("DD/MM/YYYY");
-
   try {
     const template = new Template({
       name,
-      date,
       exercises,
       userId: req.user.id,
     });

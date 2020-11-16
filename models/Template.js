@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const exerciseSchema = new Schema({
   name: { type: String },
   description: { type: String },
-  weight: { type: Number },
+  weight: { type: String },
 });
 
 const templateSchema = new Schema({
@@ -14,7 +14,7 @@ const templateSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  date: { type: Date },
+
   exercises: [exerciseSchema],
 });
 
