@@ -18,6 +18,18 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+router.get("/byDate", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const workouts = await Workout.find({ userId: req.user.id });
+
+    res.json(workouts);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 router.post("/", auth, async (req, res) => {
   const {
     templateId,
