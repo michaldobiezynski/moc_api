@@ -21,7 +21,10 @@ router.get("/", auth, async (req, res) => {
 router.get("/byDate", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    const workouts = await Workout.find({ userId: req.user.id });
+    const workouts = await Workout.find({
+      userId: req.user.id,
+      date: { $gte: req.body.startDate, $lte: req.body.endDate },
+    });
 
     res.json(workouts);
   } catch (error) {
