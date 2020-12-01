@@ -2,7 +2,7 @@ const express = require("express");
 
 const User = require("../models/User");
 const auth = require("../middleware/auth");
-// const { sendWelcomeEmail, sendDeleteEmail } = require("../emails/account");
+const { sendWelcomeEmail, sendDeleteEmail } = require("../emails/account");
 
 const router = new express.Router();
 
@@ -10,7 +10,7 @@ router.post("/users", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
-    // sendWelcomeEmail(user.email, user.name);
+    sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (error) {
@@ -103,7 +103,7 @@ router.delete("/users/me", auth, async (req, res) => {
   const userId = req.user._id;
   try {
     await req.user.remove();
-    // sendDeleteEmail(req.user.email, req.user.name);
+    sendDeleteEmail(req.user.email, req.user.name);
 
     res.send(req.user);
   } catch (error) {
