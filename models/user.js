@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
@@ -56,15 +55,6 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: Buffer,
     },
-    resetPasswordToken: {
-      type: String,
-      required: false,
-    },
-
-    resetPasswordExpires: {
-      type: Date,
-      required: false,
-    },
   },
   {
     timestamps: true,
@@ -76,10 +66,6 @@ const userSchema = new mongoose.Schema(
 //   localField: "_id",
 //   foreignField: "owner",
 // });
-
-userSchema.methods.comparePassword = function (password) {
-  return bcrypt.compareSync(password, this.password);
-};
 
 userSchema.methods.toJSON = function () {
   const user = this;
@@ -100,11 +86,6 @@ userSchema.methods.generateAuthToken = async function () {
   await user.save();
 
   return token;
-};
-
-UserSchema.methods.generatePasswordReset = function () {
-  this.resetPasswordToken = crypto.randomBytes(20).toString("hex");
-  this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
 };
 
 userSchema.statics.findByCredentials = async (email, password) => {
