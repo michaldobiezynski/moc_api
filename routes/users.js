@@ -2,15 +2,25 @@ const express = require("express");
 
 const User = require("../models/User");
 const auth = require("../middleware/auth");
-const { sendWelcomeEmail, sendDeleteEmail } = require("../emails/account");
+const {
+  sendWelcomeEmail,
+  sendDeleteEmail,
+  sendPasswordResetCode,
+} = require("../emails/account");
 
 const router = new express.Router();
 
 router.post("/passwordReset", async (req, res) => {
   try {
     const user = await User.findByEmail(req.body.email);
+
     const passwordResetCode = await user.generatePasswordResetCode();
-    res.status(200);
+
+    sendPasswordResetCode(user.email, user.name, passwordResetCode);
+    res.status(200).send();
+    setTimeout(async () => {
+      await user.generatePasswordResetCode();
+    }, 600000);
   } catch (error) {
     res.status(400).send();
   }
