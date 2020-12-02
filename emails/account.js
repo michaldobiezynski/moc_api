@@ -28,8 +28,24 @@ const sendDeleteEmail = (email, name) => {
     console.log(error);
   }
 };
+const sendPasswordResetCode = (email, name, passwordResetCode) => {
+  try {
+    sgMail.send({
+      to: email,
+      from: "milo_of_croton@outlook.com",
+      subject: "Password Reset",
+      text:
+        `Hi ${name}, if you requested password reset then please use the code below` +
+        ` to reset your password. <br> If it wasn't you then please ignore this email.` +
+        `<br> <br> You have 10 minutes to use it: <b>${passwordResetCode}</b>`,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   sendWelcomeEmail,
   sendDeleteEmail,
+  sendPasswordResetCode,
 };
