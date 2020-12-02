@@ -82,8 +82,8 @@ userSchema.methods.toJSON = function () {
 };
 
 userSchema.methods.generatePasswordResetCode = async function () {
-  let minm = 10000000;
-  let maxm = 99999999;
+  let minm = 1000;
+  let maxm = 9999;
 
   const user = this;
 
@@ -105,7 +105,7 @@ userSchema.methods.generateAuthToken = async function () {
 userSchema.methods.generateTempAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, {
-    expiresIn: 3600,
+    expiresIn: 600,
   });
 
   user.tokens = user.tokens.concat({ token });
