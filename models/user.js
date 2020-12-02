@@ -90,7 +90,7 @@ userSchema.methods.generatePasswordResetCode = async function () {
   user.passwordResetCode = Math.floor(Math.random() * (maxm - minm + 1)) + minm;
   await user.save();
 
-  return passwordResetCode;
+  return user.passwordResetCode;
 };
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
