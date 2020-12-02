@@ -81,6 +81,23 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
+userSchema.statics.findByEmailAndPasswordCode = async (
+  email,
+  passwordResetCode
+) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new Error("Unable to login!");
+  }
+
+  if (passwordResetCode != user.passwordResetCode) {
+    throw new Error("Unable to login!");
+  }
+
+  return user;
+};
+
 userSchema.methods.generatePasswordResetCode = async function () {
   let minm = 1000;
   let maxm = 9999;
