@@ -99,6 +99,16 @@ userSchema.methods.generateTempAuthToken = async function () {
   return token;
 };
 
+userSchema.statics.findByEmail = async (email) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new Error("Unable to find user!");
+  }
+
+  return user;
+};
+
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
 
