@@ -55,6 +55,9 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: Buffer,
     },
+    passwordResetCode: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
@@ -78,6 +81,17 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
+userSchema.methods.generatePasswordResetCode = async function () {
+  let minm = 10000000;
+  let maxm = 99999999;
+
+  const user = this;
+
+  user.passwordResetCode = Math.floor(Math.random() * (maxm - minm + 1)) + minm;
+  await user.save();
+
+  return passwordResetCode;
+};
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
@@ -87,6 +101,7 @@ userSchema.methods.generateAuthToken = async function () {
 
   return token;
 };
+
 userSchema.methods.generateTempAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, {
