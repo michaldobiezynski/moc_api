@@ -36,8 +36,8 @@ const sendPasswordResetCode = (email, name, passwordResetCode) => {
       subject: "Password Reset",
       text:
         `Hi ${name}, if you requested password reset then please use the code below` +
-        ` to reset your password. <br> If it wasn't you then please ignore this email.` +
-        `<br> <br> You have 10 minutes to use it: <b>${passwordResetCode}</b>`,
+        ` to reset your password. If it wasn't you then please ignore this email.` +
+        `You have 10 minutes to use it: ${passwordResetCode}`,
     });
   } catch (error) {
     console.log(error);
