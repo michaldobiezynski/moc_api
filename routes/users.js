@@ -28,6 +28,10 @@ router.post("/passwordReset", async (req, res) => {
   try {
     const user = await User.findByEmail(req.body.email);
 
+    if (!user) {
+      res.status(200).send();
+    }
+
     const passwordResetCode = await user.generatePasswordResetCode();
 
     sendPasswordResetCode(user.email, user.name, passwordResetCode);
@@ -36,7 +40,7 @@ router.post("/passwordReset", async (req, res) => {
       await user.generatePasswordResetCode();
     }, 600000);
   } catch (error) {
-    res.status(400).send();
+    res.status(200).send();
   }
 });
 
