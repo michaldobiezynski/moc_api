@@ -3,12 +3,23 @@ const express = require("express");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 const {
+  sendContactUsEmail,
   sendWelcomeEmail,
   sendDeleteEmail,
   sendPasswordResetCode,
 } = require("../emails/account");
 
 const router = new express.Router();
+
+router.post("/contactUs", auth, async (req, res) => {
+  try {
+    sendContactUsEmail(req.body.email, req.body.content);
+
+    res.status(200).send();
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 
 router.post("/users/loginWithCode", async (req, res) => {
   try {
