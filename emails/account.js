@@ -44,7 +44,21 @@ const sendPasswordResetCode = (email, name, passwordResetCode) => {
   }
 };
 
+const sendContactUsEmail = (email, content) => {
+  try {
+    sgMail.send({
+      to: "moc_sup@outlook.com",
+      from: "milo_of_croton@outlook.com",
+      subject: "Contact us",
+      text: content + " FROM: " + email,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
+  sendContactUsEmail,
   sendWelcomeEmail,
   sendDeleteEmail,
   sendPasswordResetCode,
