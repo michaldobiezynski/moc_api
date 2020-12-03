@@ -10,6 +10,20 @@ const {
 
 const router = new express.Router();
 
+router.post("/users/loginWithCode", async (req, res) => {
+  try {
+    const user = await User.findByEmailAndPasswordCode(
+      req.body.email,
+      req.body.passwordResetCode
+    );
+    const token = await user.generateTempAuthToken();
+    await user.generatePasswordResetCode();
+    res.status(200).send({ user, token });
+  } catch (error) {
+    res.status(400).send();
+  }
+});
+
 router.post("/passwordReset", async (req, res) => {
   try {
     const user = await User.findByEmail(req.body.email);
