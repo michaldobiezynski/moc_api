@@ -1,8 +1,6 @@
-const sgMail = require("@sendgrid/mail");
 const postmark = require("postmark");
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-const client = new postmark.ServerClient(process.env.SENDGRID_API_KEY);
+const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
 const sendWelcomeEmail = (email, name) => {
   try {
@@ -47,15 +45,13 @@ const sendPasswordResetCode = (email, name, passwordResetCode) => {
 };
 
 const sendContactUsEmail = (email, content) => {
-  console.log(email);
-  console.log(content);
   try {
     client.sendEmail({
       From: "no-reply@miloofcroton.co.uk",
-      To: "no-reply@miloofcroton.co.uk",
-      Subject: "Hello from Postmark",
-      HtmlBody: "<strong>Hello</strong> dear Postmark user.",
-      TextBody: "Hello from Postmark!",
+      To: "milo_of_croton@outlook.com",
+      Subject: "Contact us",
+      HtmlBody: "Content: " + content + ". From: " + email,
+      TextBody: "Content: " + content + ". From: " + email,
       MessageStream: "outbound",
     });
   } catch (error) {
