@@ -1,5 +1,6 @@
 const express = require("express");
-
+const Workout = require("../models/Workout");
+const Template = require("../models/Template");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 const {
@@ -152,6 +153,8 @@ router.delete("/users/me", auth, async (req, res) => {
   const userId = req.user._id;
   try {
     await req.user.remove();
+    await Template.deleteMany({ userId: userId });
+    await Workout.deleteMany({ userId: userId });
     // sendDeleteEmail(req.user.email, req.user.name);
 
     res.send(req.user);
