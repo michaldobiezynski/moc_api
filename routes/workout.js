@@ -5,6 +5,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const Workout = require("../models/Workout");
 const User = require("../models/User");
+const Template = require("../models/Template");
 
 router.get("/", auth, async (req, res) => {
   try {
@@ -68,25 +69,42 @@ router.post("/", auth, async (req, res) => {
       userId: req.user.id,
       templateId,
     });
-    if (workout.totalWeightLifted > req.user.bestWorkout.totalWeightLifted) {
-      req.user.bestWorkout = workout;
-      await req.user.save();
+
+    if (
+      !req.user.bestWorkout ||
+      workout.totalWeightLifted > req.user.bestWorkout.totalWeightLifted
+    ) {
+      let template = await Template.findById(workout.templateId);
+
+      req.user.bestWorkout = {
+        templatedUsed: template.name,
+        totalWeightLifted: workout.totalWeightLifted,
+        weightGoal: workout.weightGoal,
+        date: workout.date,
+        timeUsed: workout.timeUsed,
+        timeLimit: workout.timeLimit,
+      };
     }
 
+    let tempDate = workout.date;
     workout.sets.forEach((element) => {
       if (
+        !req.user.bestSet ||
         element.weight * element.reps >
-        req.user.bestSet.weight * req.user.bestSet.reps
+          req.user.bestSet.weight * req.user.bestSet.reps
       ) {
         req.user.bestSet = {
           name: element.name,
           weight: element.weight,
           reps: element.reps,
-          date: workout.date,
+          date: tempDate,
         };
       }
     });
+
+    await req.user.save();
     await workout.save();
+
     res.send(workout);
   } catch (error) {
     return res.status(422).send({ error: error.message });

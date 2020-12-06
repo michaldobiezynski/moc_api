@@ -14,6 +14,15 @@ const setSchema = new Schema({
   date: { type: Date },
 });
 
+const bestWorkout = new Schema({
+  templatedUsed: { type: String },
+  totalWeightLifted: { type: Number },
+  weightGoal: { type: Number },
+  date: { type: Date },
+  timeUsed: { type: Number },
+  timeLimit: { type: Number },
+});
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -70,7 +79,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
     bestSet: setSchema,
-    bestWorkout: Workout,
+    bestWorkout: bestWorkout,
   },
   {
     timestamps: true,
