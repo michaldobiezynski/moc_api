@@ -3,6 +3,15 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const Schema = mongoose.Schema;
+
+const setSchema = new Schema({
+  name: { type: String },
+  weight: { type: Number },
+  reps: { type: Number },
+  date: { type: Date },
+});
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -58,6 +67,7 @@ const userSchema = new mongoose.Schema(
     passwordResetCode: {
       type: Number,
     },
+    bestSet: setSchema,
   },
   {
     timestamps: true,
