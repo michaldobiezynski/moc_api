@@ -3,6 +3,8 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const Workout = require("./Workout");
+
 const Schema = mongoose.Schema;
 
 const setSchema = new Schema({
@@ -68,6 +70,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
     },
     bestSet: setSchema,
+    bestWorkout: Workout,
   },
   {
     timestamps: true,
