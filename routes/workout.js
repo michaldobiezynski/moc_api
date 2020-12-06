@@ -18,6 +18,19 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+router.get("/latest", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const lastWorkoutOfUser = await Workout.findOne({
+      userId: req.user.id,
+    }).sort({ date: -1 });
+
+    res.json(lastWorkoutOfUser);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
 router.get("/byDate", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
