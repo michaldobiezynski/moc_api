@@ -68,6 +68,10 @@ router.post("/", auth, async (req, res) => {
       userId: req.user.id,
       templateId,
     });
+    if (workout.totalWeightLifted > req.user.bestWorkout.totalWeightLifted) {
+      req.user.bestWorkout = workout;
+      await req.user.save();
+    }
     await workout.save();
     res.send(workout);
   } catch (error) {
