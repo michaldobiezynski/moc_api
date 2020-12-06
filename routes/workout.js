@@ -72,6 +72,20 @@ router.post("/", auth, async (req, res) => {
       req.user.bestWorkout = workout;
       await req.user.save();
     }
+
+    workout.sets.forEach((element) => {
+      if (
+        element.weight * element.reps >
+        req.user.bestSet.weight * req.user.bestSet.reps
+      ) {
+        req.user.bestSet = {
+          name: element.name,
+          weight: element.weight,
+          reps: element.reps,
+          date: workout.date,
+        };
+      }
+    });
     await workout.save();
     res.send(workout);
   } catch (error) {
