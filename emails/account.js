@@ -7,8 +7,8 @@ const sendWelcomeEmail = (email, name) => {
     client.sendEmail({
       to: email,
       From: "no-reply@miloofcroton.co.uk",
-      subject: "Thanks for joining in!",
-      text: `Welcome to the app, ${name}. Let me know how you get along with the app`,
+      Subject: "Thanks for joining in!",
+      HtmlBody: `Welcome to the app, ${name}. <br><br> Let me know how you get along with the app`,
     });
   } catch (error) {
     console.log(error);
@@ -19,10 +19,10 @@ const sendDeleteEmail = (email, name) => {
     client.sendEmail({
       to: email,
       From: "no-reply@miloofcroton.co.uk",
-      subject: "Sorry to see you go!",
-      text:
-        `Hi ${name}, I was wondering why you deleted your account and if there is` +
-        ` anything I could do to keep you`,
+      Subject: "Sorry to see you go!",
+      HtmlBody:
+        `Hi ${name},<br> I was wondering why you deleted your account and if there is` +
+        ` anything I could do to keep you.`,
     });
   } catch (error) {
     console.log(error);
@@ -33,11 +33,11 @@ const sendPasswordResetCode = (email, name, passwordResetCode) => {
     client.sendEmail({
       to: email,
       From: "no-reply@miloofcroton.co.uk",
-      subject: "Password Reset",
-      text:
-        `Hi ${name}, if you requested password reset then please use the code below` +
-        ` to reset your password. If it wasn't you then please ignore this email.` +
-        `You have 10 minutes to use it: ${passwordResetCode}`,
+      Subject: "Password Reset",
+      HtmlBody:
+        `Hi ${name}, <br>if you requested password reset then please use the code below` +
+        ` to reset your password. <br> <br> If it wasn't you then please ignore this email. <br><br>` +
+        `You have 10 minutes to use this code: <b>${passwordResetCode}</b>`,
     });
   } catch (error) {
     console.log(error);
@@ -51,7 +51,7 @@ const sendContactUsEmail = (email, content) => {
       To: "milo_of_croton@outlook.com",
       Subject: "Contact us",
       HtmlBody: "Content: " + content + ". From: " + email,
-      TextBody: "Content: " + content + ". From: " + email,
+
       MessageStream: "outbound",
     });
   } catch (error) {
