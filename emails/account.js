@@ -6,7 +6,7 @@ const sendWelcomeEmail = (email, name) => {
   try {
     client.sendEmail({
       to: email,
-      from: "milo_of_croton@outlook.com",
+      From: "no-reply@miloofcroton.co.uk",
       subject: "Thanks for joining in!",
       text: `Welcome to the app, ${name}. Let me know how you get along with the app`,
     });
@@ -18,7 +18,7 @@ const sendDeleteEmail = (email, name) => {
   try {
     client.sendEmail({
       to: email,
-      from: "milo_of_croton@outlook.com",
+      From: "no-reply@miloofcroton.co.uk",
       subject: "Sorry to see you go!",
       text:
         `Hi ${name}, I was wondering why you deleted your account and if there is` +
@@ -32,7 +32,7 @@ const sendPasswordResetCode = (email, name, passwordResetCode) => {
   try {
     client.sendEmail({
       to: email,
-      from: "milo_of_croton@outlook.com",
+      From: "no-reply@miloofcroton.co.uk",
       subject: "Password Reset",
       text:
         `Hi ${name}, if you requested password reset then please use the code below` +
