@@ -14,7 +14,7 @@ const router = new express.Router();
 
 router.post("/contactUs", auth, async (req, res) => {
   try {
-    // sendContactUsEmail(req.body.email, req.body.content);
+    sendContactUsEmail(req.body.email, req.body.content);
 
     res.status(200).send();
   } catch (error) {
@@ -46,7 +46,7 @@ router.post("/passwordReset", async (req, res) => {
 
     const passwordResetCode = await user.generatePasswordResetCode();
 
-    // sendPasswordResetCode(user.email, user.name, passwordResetCode);
+    sendPasswordResetCode(user.email, user.name, passwordResetCode);
     res.status(200).send();
     setTimeout(async () => {
       await user.generatePasswordResetCode();
@@ -60,7 +60,7 @@ router.post("/users", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
-    // sendWelcomeEmail(user.email, user.name);
+    sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (error) {
@@ -155,7 +155,7 @@ router.delete("/users/me", auth, async (req, res) => {
     await req.user.remove();
     await Template.deleteMany({ userId: userId });
     await Workout.deleteMany({ userId: userId });
-    // sendDeleteEmail(req.user.email, req.user.name);
+    sendDeleteEmail(req.user.email, req.user.name);
 
     res.send(req.user);
   } catch (error) {
