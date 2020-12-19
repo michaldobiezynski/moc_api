@@ -8,6 +8,8 @@ const {
   sendWelcomeEmail,
   sendDeleteEmail,
   sendPasswordResetCode,
+  sendPasswordChangeInformationEmail,
+  sendEmailChangeInformationEmail,
 } = require("../emails/account");
 
 const router = new express.Router();
@@ -124,7 +126,14 @@ router.patch("/users/me", auth, async (req, res) => {
     const user = req.user;
 
     updates.forEach((update) => {
+      if (update == "email") {
+        if (user["email"] !== req.body["email"])
+          sendEmailChangeInformationEmail(req.body["email"], user.name);
+      }
       user[update] = req.body[update];
+      if (update == "password") {
+        sendPasswordChangeInformationEmail(user.email, user.name);
+      }
     });
 
     await user.save();
