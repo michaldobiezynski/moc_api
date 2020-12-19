@@ -59,9 +59,40 @@ const sendContactUsEmail = (email, content) => {
   }
 };
 
+const sendPasswordChangeInformationEmail = (email, name) => {
+  try {
+    client.sendEmail({
+      From: "no-reply@miloofcroton.co.uk",
+      To: email,
+      Subject: "Password change",
+      HtmlBody: `Hi ${name}, your password has been changed.`,
+
+      MessageStream: "outbound",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendEmailChangeInformationEmail = (email, name) => {
+  try {
+    client.sendEmail({
+      From: "no-reply@miloofcroton.co.uk",
+      To: email,
+      Subject: "Email change",
+      HtmlBody: `Hi ${name}, your email has been changed.`,
+
+      MessageStream: "outbound",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   sendContactUsEmail,
   sendWelcomeEmail,
   sendDeleteEmail,
   sendPasswordResetCode,
+  sendPasswordChangeInformationEmail,
+  sendEmailChangeInformationEmail,
 };
