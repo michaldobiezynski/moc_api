@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const moment = require("moment");
 
-const auth = require("../../middleware/auth");
+const auth = require("../middleware/auth");
 const Template = require("../models/Template");
 const User = require("../models/User");
 
