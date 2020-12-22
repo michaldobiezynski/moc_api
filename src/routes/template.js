@@ -5,7 +5,7 @@ const moment = require("moment");
 
 const auth = require("../middleware/auth");
 const Template = require("../models/Template");
-const User = require("../models/User");
+const User = require("../models/user");
 
 router.get("/", auth, async (req, res) => {
   try {
