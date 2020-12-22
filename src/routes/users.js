@@ -1,7 +1,7 @@
 const express = require("express");
 const Workout = require("../models/Workout");
 const Template = require("../models/Template");
-const User = require("../models/User");
+const User = require("../models/user");
 const auth = require("../middleware/auth");
 const {
   sendContactUsEmail,
