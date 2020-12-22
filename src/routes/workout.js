@@ -4,7 +4,7 @@ const router = express.Router();
 
 const auth = require("../middleware/auth");
 const Workout = require("../models/Workout");
-const User = require("../models/User");
+const User = require("../models/user");
 const Template = require("../models/Template");
 
 router.get("/", auth, async (req, res) => {
